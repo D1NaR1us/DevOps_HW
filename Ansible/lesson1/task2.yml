@@ -1,25 +1,20 @@
 ---
-- name: Install default Apache
+- name: Remove default Apache
   hosts: test
   become: yes
   
   vars:
-    source_file: /root/myansible/index.html
-    dest_file: /var/www/html
     service_list:
       - { service: http, state: disabled }
       - { service: https, state: disabled }
 
-  tasks: 
-    - name: yum remove Apache
-      yum: name=httpd state=absent
-      
-    #- name: State Apache and Enable it on test servers
-    #  service: name=httpd state=started enabled=yes
-
+  tasks:
     - name: Remove index.html file
       file: path='/var/www/html/index.html' state=absent
       notify: Restart Apache
+
+    - name: yum remove Apache
+      yum: name=httpd state=absent
     
     - name: Close firewalld ports
       firewalld:
