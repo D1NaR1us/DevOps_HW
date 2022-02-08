@@ -2,7 +2,7 @@
 #python -c 'import crypt; print crypt.crypt("Type here your pass", crypt.mksalt(crypt.METHOD_SHA512))'
 
 ---
-- name: Remove default Apache
+- name: Create users on servers
   hosts: test
   become: yes
   vars:

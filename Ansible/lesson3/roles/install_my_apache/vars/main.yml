@@ -1,0 +1,8 @@
+---
+# vars file for install_my_apache
+
+dest_file: /var/www/html
+service_list:
+  - { service: http, state: enabled }
+  - { service: https, state: enabled }
+  - { service: dns, state: enabled }

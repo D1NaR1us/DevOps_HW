@@ -1,0 +1,44 @@
+---
+# tasks file for install_my_ftp
+
+- name: Install FTP package
+  yum:
+    name: vsftpd
+    state: present
+
+- name: State FTP and Enable it on test servers
+  service: name=vsftpd state=started enabled=yes
+
+- name: Allow FTP port in Firewall
+  firewalld: port=21/tcp permanent=true state=enabled
+  notify: Restart Firewalld
+
+- name: Allow FTP service in Firewall
+  firewalld: service=ftp permanent=true state=enabled
+  notify: Restart Firewalld
+  
+- name: Create home dir for anonymous user if it does not exists
+  file:
+    path: /var/ftp/pub
+    state: directory
+    mode: 0755
+- name: Create upload dir for anonymous user if it does not exists
+  file:
+    path: /var/ftp/pub/upload
+    state: directory
+    mode: 0757
+
+- name: Modify FTP configuation
+  lineinfile:
+    dest: /etc/vsftpd/vsftpd.conf
+    backup: yes
+    backrefs: yes
+    state: present
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: anonymous_enable=NO, line: anonymous_enable=YES }
+    - { regexp: anon_upload_enable, line: anon_upload_enable=YES }
+    - { regexp: anon_mkdir_write_enable, line: anon_mkdir_write_enable=YES }
+    - { regexp: allow_writeable_chroot, line: allow_writeable_chroot=YES }
+  notify: Start FTP service

@@ -1,0 +1,8 @@
+---
+- name: Install default Apache/FTP with roles
+  hosts: test
+  become: yes
+
+  roles:
+    - install_my_apache
+    - install_my_ftp
