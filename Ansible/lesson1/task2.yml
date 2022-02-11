@@ -11,7 +11,7 @@
   tasks:
     - name: Remove index.html file
       file: path='/var/www/html/index.html' state=absent
-      notify: Restart Apache
+      #notify: Restart Apache
 
     - name: yum remove Apache
       yum: name=httpd state=absent
