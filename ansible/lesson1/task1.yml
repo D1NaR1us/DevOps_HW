@@ -7,15 +7,9 @@
     source_file: ./index.html
     dest_file: /var/www/html
     service_list:
-      - name: http
-        service: http
-        state: enabled
-      - name: https
-        service: https
-        state: enabled
-      - name: dns
-        service: dns
-        state: enabled
+      - {service: http,state: enabled}
+      - {service: https,state: enabled}
+      - {service: dns,state: enabled}
 
   tasks:
     - name: yum install Apache
@@ -31,17 +25,17 @@
 
     - name: Upload index.html file
       copy:
-        src: { { source_file } }
-        dest: { { dest_file } }
+        src: {{source_file}}
+        dest: {{dest_file}}
         mode: 0555
       notify: Restart Apache
 
     - name: Open firewalld ports
       firewalld:
-        service: { { item.service } }
+        service: {{item.service}}
         permanent: true
-        state: { { item.state } }
-      loop: { { service_list } }
+        state: {{item.state}}
+      loop: {{service_list}}
       notify: Restart Firewalld
 
   handlers:
