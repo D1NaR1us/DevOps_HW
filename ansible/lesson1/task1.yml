@@ -13,7 +13,9 @@
 
   tasks:
     - name: yum install Apache
-      yum: name=httpd state=latest
+      yum: 
+        name: httpd
+        state: latest
 
     - name: State Apache and Enable it on test servers
       service: name=httpd state=started enabled=yes
