@@ -2,7 +2,7 @@
 - name: Install default Apache
   hosts: test
   become: yes
-  
+
   vars:
     source_file: ./index.html
     dest_file: /var/www/html
@@ -10,19 +10,18 @@
       - { service: http, state: enabled }
       - { service: https, state: enabled }
       - { service: dns, state: enabled }
-    
 
-  tasks: 
+  tasks:
     - name: yum install Apache
       yum: name=httpd state=latest
-      
+
     - name: State Apache and Enable it on test servers
       service: name=httpd state=started enabled=yes
 
     - name: Upload index.html file
       copy: src={{ source_file }} dest={{ dest_file }} mode=0555
       notify: Restart Apache
-    
+
     - name: Open firewalld ports
       firewalld:
         service: "{{ item.service }}"
@@ -30,7 +29,7 @@
         state: "{{ item.state }}"
       loop: "{{ service_list }}"
       notify: Restart Firewalld
-  
+
   handlers:
     - name: Restart Apache
       service: name=httpd state=restarted
