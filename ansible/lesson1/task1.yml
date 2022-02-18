@@ -7,33 +7,49 @@
     source_file: ./index.html
     dest_file: /var/www/html
     service_list:
-      - { service: http, state: enabled }
-      - { service: https, state: enabled }
-      - { service: dns, state: enabled }
+      - name: http
+        service: http
+        state: enabled
+      - name: https
+        service: https
+        state: enabled
+      - name: dns
+        service: dns
+        state: enabled
 
   tasks:
     - name: yum install Apache
-      yum: 
+      yum:
         name: httpd
         state: latest
 
     - name: State Apache and Enable it on test servers
-      service: name=httpd state=started enabled=yes
+      service:
+        name: httpd
+        state: started
+        enabled: yes
 
     - name: Upload index.html file
-      copy: src={{ source_file }} dest={{ dest_file }} mode=0555
+      copy:
+        src: { { source_file } }
+        dest: { { dest_file } }
+        mode: 0555
       notify: Restart Apache
 
     - name: Open firewalld ports
       firewalld:
-        service: "{{ item.service }}"
+        service: { { item.service } }
         permanent: true
-        state: "{{ item.state }}"
-      loop: "{{ service_list }}"
+        state: { { item.state } }
+      loop: { { service_list } }
       notify: Restart Firewalld
 
   handlers:
     - name: Restart Apache
-      service: name=httpd state=restarted
+      service:
+        name: httpd
+        state: restarted
     - name: Restart Firewalld
-      service: name=firewalld state=restarted
+      service:
+        name: ansible.posix.firewalld
+        state: restarted
