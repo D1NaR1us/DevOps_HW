@@ -1,15 +1,15 @@
 ---
 - name: Install default Apache
   hosts: test
-  become: yes
+  become: true
 
   vars:
     source_file: ./index.html
     dest_file: /var/www/html
     service_list:
-      - { service: http, state: enabled }
-      - { service: https, state: enabled }
-      - { service: dns, state: enabled }
+      - {service: http, state: enabled}
+      - {service: https, state: enabled}
+      - {service: dns, state: enabled}
 
   tasks:
     - name: yum install Apache
@@ -34,4 +34,4 @@
     - name: Restart Apache
       service: name=httpd state=restarted
     - name: Restart Firewalld
-      service: name=firewalld state=restarted
+      service: name=ansible.posix.firewalld state=restarted
