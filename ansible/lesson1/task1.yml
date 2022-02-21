@@ -34,4 +34,4 @@
     - name: Restart Apache
       service: name=httpd state=restarted
     - name: Restart Firewalld
-      service: name=ansible.posix.firewalld state=restarted
+      service: name=firewalld state=restarted
