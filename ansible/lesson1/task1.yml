@@ -33,5 +33,5 @@
   handlers:
     - name: Restart Apache
       service: name=apache2 state=restarted
-    - name: Restart Firewall
+    - name: Restart Firewalld
       service: name=firewalld state=restarted
