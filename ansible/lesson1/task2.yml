@@ -13,7 +13,7 @@
       file: path='/var/www/html/index.html' state=absent
 
     - name: yum remove Apache
-      yum: name=apache2 state=absent
+      yum: name=httpd state=absent
 
     - name: Close firewalld ports
       firewalld:
@@ -25,6 +25,6 @@
 
   handlers:
     - name: Restart Apache
-      service: name=apache2 state=restarted
+      service: name=httpd state=restarted
     - name: Restart Firewalld
       service: name=firewalld state=restarted
