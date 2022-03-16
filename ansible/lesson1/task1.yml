@@ -15,6 +15,9 @@
     - name: apt install Apache
       apt: name=apache2 state=latest
 
+    - name: apt install FirewallD
+      apt: name=firewalld state=latest
+
     - name: State Apache and Enable it on test servers
       service: name=apache2 state=started enabled=yes
 

@@ -15,6 +15,9 @@
     - name: apt remove Apache
       apt: name=apache2 state=absent
 
+    - name: apt remove FirewallD
+      apt: name=firewalld state=absent
+
   handlers:
     - name: Restart Apache
       service: name=apache2 state=restarted
