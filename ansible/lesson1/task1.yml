@@ -12,8 +12,11 @@
       - {service: dns, state: enabled}
 
   tasks:
-    - name: yum install Apache
-      yum: name=apache2 state=latest
+    - name: apt install Apache
+      apt: name=apache2 state=latest
+
+    - name: apt install FirewallD
+      apt: name=firewalld state=latest
 
     - name: State Apache and Enable it on test servers
       service: name=apache2 state=started enabled=yes
@@ -22,6 +25,16 @@
       copy: src={{ source_file }} dest={{ dest_file }} mode=0555
       notify: Restart Apache
 
+    - name: Open firewalld ports
+      firewalld:
+        service: "{{ item.service }}"
+        permanent: true
+        state: "{{ item.state }}"
+      loop: "{{ service_list }}"
+      notify: Restart Firewalld
+
   handlers:
     - name: Restart Apache
       service: name=apache2 state=restarted
+    - name: Restart FirewallD
+      service: name=firewalld state=restarted

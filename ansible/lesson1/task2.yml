@@ -12,9 +12,14 @@
     - name: Remove index.html file
       file: path='/var/www/html/index.html' state=absent
 
-    - name: yum remove Apache
-      yum: name=apache2 state=absent
+    - name: apt remove Apache
+      apt: name=apache2 state=absent
+
+    - name: apt remove FirewallD
+      apt: name=firewalld state=absent
 
   handlers:
     - name: Restart Apache
       service: name=apache2 state=restarted
+    - name: Restart Firewalld
+      service: name=firewalld state=restarted
