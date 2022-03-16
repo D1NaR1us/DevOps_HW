@@ -13,18 +13,8 @@
       file: path='/var/www/html/index.html' state=absent
 
     - name: yum remove Apache
-      yum: name=httpd state=absent
-
-    - name: Close firewalld ports
-      firewalld:
-        service: "{{ item.service }}"
-        permanent: true
-        state: "{{ item.state }}"
-      loop: "{{ service_list }}"
-      notify: Restart Firewalld
+      yum: name=apache2 state=absent
 
   handlers:
     - name: Restart Apache
-      service: name=httpd state=restarted
-    - name: Restart Firewalld
-      service: name=firewalld state=restarted
+      service: name=apache2 state=restarted
