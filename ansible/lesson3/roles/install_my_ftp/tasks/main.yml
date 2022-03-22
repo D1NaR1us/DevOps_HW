@@ -42,3 +42,10 @@
     - { regexp: anon_mkdir_write_enable, line: anon_mkdir_write_enable=YES }
     - { regexp: allow_writeable_chroot, line: allow_writeable_chroot=YES }
   notify: Start FTP service
+
+
+- name: Modify SElinux
+  shell: setsebool -P allow_ftpd_anon_write on
+
+- name: Modify SElinux
+  shell: chcon -t public_content_rw_t /var/ftp/pub/upload/
